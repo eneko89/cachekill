@@ -1,0 +1,29 @@
+{
+  "name": "cachekill",
+  "version": "0.1.0",
+  "description": "Simple command line cache busting tool which fingerprints files with a content hash.",
+  "author": "Eneko <contact@eneko.me>",
+  "license": "MIT",
+  "keywords": [
+    "cache",
+    "busting",
+    "bust",
+    "fingerprint",
+    "hash"
+  ],
+  "bin": {
+    "cachekill": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eneko/cachekill.git"
+  },
+  "dependencies": {
+    "commander": "~7.0.0",
+    "globby": "~11.0.2",
+    "replace-in-file": "~6.1.0"
+  },
+  "engines": {
+    "node": "~10.0.0"
+  }
+}
