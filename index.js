@@ -42,7 +42,7 @@ async function cachekill(sourceFiles, targetFiles,
     const hash = await getHash(filePath, hashLength);
     const parsedPath = path.parse(filePath);
     const newBase = `${parsedPath.name}-${hash}${parsedPath.ext}`;
-    const newPath = `${parsedPath.dir}/${newBase}`;
+    const newPath = `${parsedPath.dir}${path.sep}${newBase}`;
     const operation = rename ? fs.rename : fs.copyFile;
 
     await operation(filePath, newPath);
