@@ -15,10 +15,10 @@ Run `cachekill --help` for usage information.
       -v, --version            Outputs the current version number
       -s, --source <files...>  Source file(s); a fingerprinted copy will be generated for each of them
       -t, --target <files...>  Target file(s); files with references to source files to be replaced
-      -l, --length <length>    Length of the fingerprint (between 1-32); longer means less colisions (defaults to 32)
-      -r, --rename             Rename source files with the fingerprint instead of generating copies; ignores --directory
+      -l, --length <length>    Length of the fingerprint (between 1-32); longer means less collisions (defaults to 32)
+      -r, --rename             Rename source files with the fingerprint instead of generating copies
       -q, --quiet              Supresses console output
-      -h, --help               Displays usage information.
+      -h, --help               Displays usage information
 
 Both source and target files suport globbing.
 
