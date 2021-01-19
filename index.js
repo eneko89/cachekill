@@ -7,7 +7,6 @@ const fs = require('fs').promises;
 const program = require('commander');
 const replace = require('replace-in-file');
 
-
 program
   .version('0.1.0', '-v, --version', 'Outputs the current version number')
   .requiredOption('-s, --source <files...>', 'Source file(s); a fingerprinted copy will be generated for each of them')
@@ -19,10 +18,7 @@ program
   .parse(process.argv)
 
 const options = program.opts();
-
-if (options.quiet) {
-  console.log = () => {};
-}
+const log = options.quiet ? () => {} : console.log;
 
 cachekill(
   globby.sync(options.source),
@@ -33,32 +29,37 @@ cachekill(
 
 async function cachekill(sourceFiles, targetFiles,
                          hashLength = 32, rename = false) {
-  let from = [];
-  let to = [];
-
+  const sourceBases = [];
+  const sourcePaths = [];
+  const operation = rename ? fs.rename : fs.copyFile;
   sourceFiles.sort().reverse();
 
-  for (let filePath of sourceFiles) {
+  for (const filePath of sourceFiles) {
     const hash = await getHash(filePath, hashLength);
+
     const parsedPath = path.parse(filePath);
     const newBase = `${parsedPath.name}-${hash}${parsedPath.ext}`;
     const newPath = `${parsedPath.dir}${path.sep}${newBase}`;
-    const operation = rename ? fs.rename : fs.copyFile;
 
-    await operation(filePath, newPath);
-    console.log(rename ? 'renamed:' : 'copied:', filePath, '-->', newPath);
-
-    from.push(parsedPath.base);
-    to.push(newBase);
+    sourceBases.push({ newBase, base: parsedPath.base });
+    sourcePaths.push({ newPath, path: filePath });
   }
 
-  await replace({ from, to, files: targetFiles });
-  console.log(`${targetFiles.length} target file(s) updated`);
+  await replace({
+    from: sourceBases.map(obj => obj.base),
+    to: sourceBases.map(obj => obj.newBase),
+    files: targetFiles
+  });
+  log(`${targetFiles.length} target file(s) updated`);
+
+  for (const obj of sourcePaths) {
+    await operation(obj.path, obj.newPath);
+    log(rename ? 'renamed:' : 'copied:', obj.path, '-->', obj.newPath);
+  }
 }
 
 async function getHash(filePath, hashLength = 32) {
   const hash = crypto.createHash('md5');
-  const fileContent = await fs.readFile(filePath);
-  hash.update(fileContent);
+  hash.update(await fs.readFile(filePath));
   return hash.digest('hex').slice(0, hashLength);
 }
