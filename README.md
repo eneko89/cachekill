@@ -1,6 +1,6 @@
 # cachekill
 
-Simple command line cache busting tool which fingerprints files with a content hash.
+Simple command line cache busting tool which fingerprints source files with a md5 content hash (either creating copies or renaming them) and replaces references to those files in target files with the new source filenames.
 
 There were already similar packages out there, but either they weren't actively mantained, they lacked some feature I wanted or weren't as fast as they could be. This tool aims to be fast, concise, written in modern JS and actively mantained.
 

@@ -27,11 +27,24 @@ cachekill(
   options.rename
 );
 
-async function cachekill(sourceFiles, targetFiles,
-                         hashLength = 32, rename = false) {
+/**
+ * Fingerprints sourceFiles (either creating copies or renaming them) with a md5
+ * content hash and replaces references to those files in targetFiles with the
+ * new source filenames.
+ *
+ * @param {stirng[]} sourceFiles      Files to fingerprint.
+ * @param {string[]} targetFiles      Files with references to sourceFiles.
+ * @param {number}   [hashLength =32] Length of the resulting hash (sliced md5).
+ * @param {boolean}  [rename=false]   Rename instead of copying source files.
+ */
+async function cachekill(sourceFiles, targetFiles, hashLength = 32, rename = false) {
   const sourceBases = [];
   const sourcePaths = [];
   const operation = rename ? fs.rename : fs.copyFile;
+
+  // Make sure that sourceFiles are sorted in a reverse alphabetical order,
+  // so files with common filename endings don't get wrongly replaced. E.g.:
+  // ['file.js', 'other-file.js'] --> ['other-file.js', 'file.js'].
   sourceFiles.sort().reverse();
 
   for (const filePath of sourceFiles) {
@@ -58,6 +71,13 @@ async function cachekill(sourceFiles, targetFiles,
   }
 }
 
+/**
+ * Generates a md5 hash of the file in filePath.
+ *
+ * @param  {stirng} filePath        Path to the file to process.
+ * @param  {number} [hashLength=32] Length of the resulting hash.
+ * @return {string}                 Hash in hex notation.
+ */
 async function getHash(filePath, hashLength = 32) {
   const hash = crypto.createHash('md5');
   hash.update(await fs.readFile(filePath));
