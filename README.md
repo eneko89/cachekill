@@ -1,6 +1,6 @@
 # cachekill
 
-Simple command line cache busting tool which fingerprints source files with a md5 content hash (either creating copies or renaming them) and replaces references to those files in target files with the new source filenames.
+Simple command line cache busting tool which fingerprints source files with a md5 content hash (either creating copies or renaming them) and replaces references to those files in target files with the new filenames.
 
 There were already similar packages out there, but either they weren't actively mantained, they lacked some feature I wanted or weren't as fast as they could be. This tool aims to be fast, concise, written in modern JS and actively mantained.
 
@@ -20,52 +20,52 @@ Run `cachekill --help` for usage information.
       -q, --quiet              Supresses console output
       -h, --help               Displays usage information
 
-Both source and target files suport globbing.
+Both source and target can be a list or files or globs. It will work even in platforms and shells that don't support globbing (like Windows), because `cachekill` has support for expanding globs itself. Just make sure you quote the arguments so the glob expansion will not depend on the shell you run the command.
 
 
 ## Examples
 
 Take this folder structure as a starting point:
 
-    ├── assets
-    │   ├── img
-    │   │   ├── a.jpg
-    │   │   └── b.jpg
-    │   ├── css
-    │   │   └── bundle.min.css
-    │   └── js
-    │       └── bundle.min.js
-    └── index.html
+    └── assets
+        ├── img
+        │   ├── a.jpg
+        │   └── b.jpg
+        ├── css
+        │   └── bundle.min.css
+        ├── js
+        │   └── bundle.min.js
+        └── index.html
 
-After running `cachekill -s assets/{js,css}/*.min.{js,css} assets/img/*  -t index.html`, you'd have:
+After running `cachekill -s 'assets/**/!(*.html)' -t 'assets/**/*.{js,css,html}'`, you'd have:
 
-    ├── assets
-    │   ├── img
-    │   │   ├── a.jpg
-    │   │   ├── a-HASH.jpg
-    │   │   ├── b.jpg
-    │   │   └── b-HASH.jpg
-    │   ├── css
-    │   │   ├── bundle.min.css
-    │   │   └── bundle.min-HASH.css
-    │   └── js
-    │       ├── bundle.min.js
-    │       └── bundle.min-HASH.js
-    └── index.html
+    └── assets
+        ├── img
+        │   ├── a.jpg
+        │   ├── a-HASH.jpg
+        │   ├── b.jpg
+        │   └── b-HASH.jpg
+        ├── css
+        │   ├── bundle.min.css
+        │   └── bundle.min-HASH.css
+        ├── js
+        │    ├── bundle.min.js
+        │    └── bundle.min-HASH.js
+        └── index.html
 
-All the occurrences of `a.jpg`, `b.jpg`, `bundle.min.css` and `bundle.min.js` in `index.html` (e.g., src of image and script tags) would've been replaced by `a-HASH.jpg`, `b-HASH.jpg`, `bundle.min-HASH.css` and `bundle.min-HASH.js`
+All files not ending with `.html` have been fingerprinted and all the occurrences of those in every `.js`, `.css` and `.html` files replaced by the new filenames.
 
 If you run it with `-r` or `--rename` option, files would've been renamed instead of copied:
 
-    ├── assets
-    │   ├── img
-    │   │   ├── a-HASH.jpg
-    │   │   └── b-HASH.jpg
-    │   ├── css
-    │   │   └── bundle.min-HASH.css
-    │   └── js
-    │       └── bundle.min-HASH.js
-    └── index.html
+    └── assets
+        ├── img
+        │   ├── a-HASH.jpg
+        │   └── b-HASH.jpg
+        ├── css
+        │   └── bundle.min-HASH.css
+        ├── js
+        │   └── bundle.min-HASH.js
+        └── index.html
 
 
 ## License
