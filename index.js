@@ -12,7 +12,7 @@ program
   .requiredOption('-s, --source <files...>', 'Source file(s); a fingerprinted copy will be generated for each of them')
   .requiredOption('-t, --target <files...>', 'Target file(s); files with references to source files to be replaced')
   .option('-l, --length <length>', 'Length of the fingerprint (between 1-32); longer means less colisions (defaults to 32)')
-  .option('-r, --rename', 'Rename source files with the fingerprint instead of generating copies; ignores --directory')
+  .option('-r, --rename', 'Rename source files with the fingerprint instead of generating copies; ignores')
   .option('-q, --quiet', 'Supresses console output')
   .helpOption('-h, --help', 'Displays usage information')
   .parse(process.argv)
@@ -34,7 +34,7 @@ cachekill(
  *
  * @param {stirng[]} sourceFiles      Files to fingerprint.
  * @param {string[]} targetFiles      Files with references to sourceFiles.
- * @param {number}   [hashLength =32] Length of the resulting hash (sliced md5).
+ * @param {number}   [hashLength=32] Length of the resulting hash (sliced md5).
  * @param {boolean}  [rename=false]   Rename instead of copying source files.
  */
 async function cachekill(sourceFiles, targetFiles, hashLength = 32, rename = false) {
