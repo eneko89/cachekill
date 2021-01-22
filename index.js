@@ -58,17 +58,42 @@ async function cachekill(sourceFiles, targetFiles, hashLength = 32, rename = fal
     sourcePaths.push({ newPath, path: filePath });
   }
 
+  if (rename) {
+    await replaceReferences(sourceBases, targetFiles);
+  } else {
+    for (const obj of sourcePaths) {
+      const index = targetFiles.indexOf(obj.path);
+      if (index !== -1) {
+        targetFiles[index] = obj.newPath;
+      }
+    }
+  }
+
+  for (const obj of sourcePaths) {
+    await operation(obj.path, obj.newPath);
+    log(rename ? 'renamed:' : 'copied:', obj.path, '-->', obj.newPath);
+  }
+
+  if (!rename) {
+    await replaceReferences(sourceBases, targetFiles);
+  }
+}
+
+/**
+ * Replaces the old file bases with the new ones in targetFiles.
+ *
+ * @param {Object[]} sourceBases           New and old and file bases.
+ * @param {string}   sourceBases[].base    Old file base, e.g., name.js.
+ * @param {string}   sourceBases[].newBase New file base, e.g., name-HASH.js.
+ * @param {string[]} targetFiles
+ */
+async function replaceReferences(sourceBases, targetFiles) {
   await replace({
     from: sourceBases.map(obj => obj.base),
     to: sourceBases.map(obj => obj.newBase),
     files: targetFiles
   });
   log(`${targetFiles.length} target file(s) updated`);
-
-  for (const obj of sourcePaths) {
-    await operation(obj.path, obj.newPath);
-    log(rename ? 'renamed:' : 'copied:', obj.path, '-->', obj.newPath);
-  }
 }
 
 /**
