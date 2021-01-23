@@ -85,7 +85,7 @@ async function cachekill(sourceFiles, targetFiles, hashLength = 32, rename = fal
  * @param {Object[]} sourceBases           New and old and file bases.
  * @param {string}   sourceBases[].base    Old file base, e.g., name.js.
  * @param {string}   sourceBases[].newBase New file base, e.g., name-HASH.js.
- * @param {string[]} targetFiles
+ * @param {string[]} targetFiles           Target files to update.
  */
 async function replaceReferences(sourceBases, targetFiles) {
   await replace({
