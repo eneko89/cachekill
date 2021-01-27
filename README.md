@@ -2,8 +2,16 @@
 
 Simple command line cache busting tool which fingerprints source files with a md5 content hash (either creating copies or renaming them) and replaces references to those files in target files with the new filenames.
 
-There were already similar packages out there, but either they weren't actively mantained, they lacked some feature I wanted or weren't as fast as they could be. This tool aims to be fast, concise, written in modern JS and actively mantained.
+There were already similar packages out there, but either they weren't actively mantained or they lacked some feature I wanted. This is:
+- Fast, by doing all the IO asyncrhonously.
+- Modern, by handling promises using async await.
+- Up to date with the few dependencies it has.
+- Actively mantained.
 
+![Version](https://img.shields.io/github/package-json/v/eneko89/cachekill?style=for-the-badge)
+![Lines of code](https://img.shields.io/tokei/lines/github/eneko89/cachekill?style=for-the-badge)
+![Npm downloads](https://img.shields.io/npm/dw/cachekill?style=for-the-badge)
+![Maintenance](https://img.shields.io/maintenance/yes/2021?style=for-the-badge)
 
 ## Using cachekill
 
