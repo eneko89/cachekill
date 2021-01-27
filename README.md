@@ -8,9 +8,9 @@ There were already similar packages out there, but either they weren't actively 
 - Up to date with the few dependencies it has.
 - Actively mantained.
 
-![Version](https://img.shields.io/github/package-json/v/eneko89/cachekill?style=for-the-badge)
+![Last Version](https://img.shields.io/github/package-json/v/eneko89/cachekill?label=last%20version&style=for-the-badge)
 ![Lines of code](https://img.shields.io/tokei/lines/github/eneko89/cachekill?style=for-the-badge)
-![Npm downloads](https://img.shields.io/npm/dw/cachekill?style=for-the-badge)
+![Npm downloads](https://img.shields.io/npm/dw/cachekill?label=npm%20downloads&style=for-the-badge)
 ![Maintenance](https://img.shields.io/maintenance/yes/2021?style=for-the-badge)
 
 ## Using cachekill
