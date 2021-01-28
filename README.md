@@ -1,4 +1,8 @@
 # cachekill
+![Last Version](https://img.shields.io/github/package-json/v/eneko89/cachekill?style=for-the-badge)
+![Lines of code](https://img.shields.io/tokei/lines/github/eneko89/cachekill?style=for-the-badge)
+![Npm downloads](https://img.shields.io/npm/dw/cachekill?style=for-the-badge)
+![Maintenance](https://img.shields.io/maintenance/yes/2021?style=for-the-badge)
 
 Simple command line cache busting tool which fingerprints source files with a md5 content hash (either creating copies or renaming them) and replaces references to those files in target files with the new filenames.
 
@@ -9,11 +13,6 @@ There were already similar packages out there, but either they weren't actively 
 - Compatible with globs.
 - Actively mantained.
 
-![Last Version](https://img.shields.io/github/package-json/v/eneko89/cachekill?label=last%20version&style=for-the-badge)
-![Lines of code](https://img.shields.io/tokei/lines/github/eneko89/cachekill?style=for-the-badge)
-
-![Npm downloads](https://img.shields.io/npm/dw/cachekill?label=npm%20downloads&style=for-the-badge)
-![Maintenance](https://img.shields.io/maintenance/yes/2021?style=for-the-badge)
 
 ## Using cachekill
 
