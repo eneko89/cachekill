@@ -6,9 +6,17 @@
   "license": "MIT",
   "keywords": [
     "cache",
+    "caching",
     "busting",
-    "bust",
+    "buster",
+    "cachebuster",
     "fingerprint",
+    "fingerprinting",
+    "version",
+    "versioning",
+    "revision",
+    "revisioning",
+    "assets",
     "hash"
   ],
   "bin": {
