@@ -8,7 +8,7 @@ const program = require('commander');
 const replace = require('replace-in-file');
 
 program
-  .version('1.0.7', '-v, --version', 'Outputs the current version number')
+  .version('1.0.8', '-v, --version', 'Outputs the current version number')
   .requiredOption('-s, --source <files...>', 'Source file(s); a fingerprinted copy will be generated for each of them')
   .requiredOption('-t, --target <files...>', 'Target file(s); files with references to source files to be replaced')
   .option('-l, --length <length>', 'Length of the fingerprint (between 1-32); longer means less colisions (defaults to 32)')
