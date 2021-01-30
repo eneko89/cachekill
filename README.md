@@ -29,7 +29,7 @@ Run `cachekill --help` for usage information.
       -q, --quiet              Supresses console output
       -h, --help               Displays usage information
 
-Both source and target can be a list or files or globs. It will work even in platforms and shells that don't support globbing (like Windows), because `cachekill` has support for expanding globs itself. Just make sure you quote the arguments so the glob expansion will not depend on the shell you run the command.
+Both source and target can be a list or files or globs. It will work even in platforms and shells that don't support globbing (like Windows), because `cachekill` has support for expanding globs itself. Just make sure you quote the arguments so the glob expansion will not depend on the shell you run the command in.
 
 
 ## Examples
