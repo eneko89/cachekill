@@ -3,10 +3,7 @@
   "version": "1.0.9",
   "description": "Simple command line cache busting tool which fingerprints files with a content hash.",
   "author": "Eneko <contact@eneko.me>",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/eneko89/cachekill.git"
-  },
+  "repository": "eneko89/cachekill",
   "license": "MIT",
   "keywords": [
     "cache",
