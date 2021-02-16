@@ -28,7 +28,7 @@
     "cachekill": "index.js"
   },
   "dependencies": {
-    "commander": "~7.0.0",
+    "commander": "~7.1.0",
     "globby": "~11.0.2",
     "replace-in-file": "~6.2.0"
   },
