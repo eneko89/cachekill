@@ -8,15 +8,16 @@ Simple command line cache busting tool which fingerprints source files with a md
 
 There were already similar packages out there, but either they weren't actively mantained or they lacked some feature I wanted. This one is:
 - Fast, by doing all the IO asyncrhonously.
-- Modern, by handling promises using async await.
+- Modern, by handling promises using async/await.
 - Up to date with the few dependencies it has.
 - Compatible with globs.
 - Actively mantained.
 
+> :warning:&nbsp; **Warning:** From v2.0.0, cachekill uses ECMAScript module syntax and top level await statements, which are supported unflagged from Node v13.0.0 and v14.8.0 respectively. Upgrade your Node version or stick to v1.1.0 for Node 10.0.0 or higher support.
 
 ## Using cachekill
 
-To install it: `npm install cachekill` (requires Node 10.0.0 or higher)
+To install it: `npm install cachekill` (requires Node 14.8.0 or higher)
 
 Run `cachekill --help` for usage information.
 
