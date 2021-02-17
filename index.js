@@ -6,6 +6,8 @@ const crypto = require('crypto');
 const fs = require('fs').promises;
 const program = require('commander');
 const replace = require('replace-in-file');
+const performance = require('perf_hooks').performance;
+const startTime = performance.now();
 
 program
   .version('1.0.10', '-v, --version', 'Outputs the current version number')
@@ -77,6 +79,9 @@ async function cachekill(sourceFiles, targetFiles, hashLength = 32, rename = fal
   if (!rename) {
     await replaceReferences(sourceBases, targetFiles);
   }
+
+  const elapsedTime = Math.round(performance.now() - startTime);
+  log(`${targetFiles.length} target file(s) updated in ${elapsedTime}ms`);
 }
 
 /**
@@ -93,7 +98,6 @@ async function replaceReferences(sourceBases, targetFiles) {
     to: sourceBases.map(obj => obj.newBase),
     files: targetFiles
   });
-  log(`${targetFiles.length} target file(s) updated`);
 }
 
 /**
