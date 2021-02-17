@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-const path = require('path');
-const globby = require('globby');
-const crypto = require('crypto');
-const fs = require('fs').promises;
-const program = require('commander');
-const replace = require('replace-in-file');
-const performance = require('perf_hooks').performance;
+import path from'path';
+import crypto from 'crypto';
+import glob from 'fast-glob';
+import program from 'commander';
+import replace from 'replace-in-file';
+import { promises as fs } from 'fs';
+import { performance } from 'perf_hooks';
+
 const startTime = performance.now();
 
 program
@@ -23,8 +24,8 @@ const options = program.opts();
 const log = options.quiet ? () => {} : console.log;
 
 cachekill(
-  globby.sync(options.source),
-  globby.sync(options.target),
+  await glob(options.source),
+  await glob(options.target),
   options.length,
   options.rename
 );

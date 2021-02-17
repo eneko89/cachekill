@@ -5,6 +5,7 @@
   "author": "Eneko <contact@eneko.me>",
   "repository": "eneko89/cachekill",
   "license": "MIT",
+  "type": "module",
   "keywords": [
     "cache",
     "caching",
@@ -29,7 +30,7 @@
   },
   "dependencies": {
     "commander": "~7.1.0",
-    "globby": "~11.0.2",
+    "fast-glob": "~3.2.5",
     "replace-in-file": "~6.2.0"
   },
   "engines": {
