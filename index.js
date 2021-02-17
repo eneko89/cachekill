@@ -10,7 +10,7 @@ const performance = require('perf_hooks').performance;
 const startTime = performance.now();
 
 program
-  .version('1.0.10', '-v, --version', 'Outputs the current version number')
+  .version('1.1.0', '-v, --version', 'Outputs the current version number')
   .requiredOption('-s, --source <files...>', 'Source file(s); a fingerprinted copy will be generated for each of them')
   .requiredOption('-t, --target <files...>', 'Target file(s); files with references to source files to be replaced')
   .option('-l, --length <length>', 'Length of the fingerprint (between 1-32); longer means less colisions (defaults to 32)')
