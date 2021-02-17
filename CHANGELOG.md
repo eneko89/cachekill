@@ -4,10 +4,15 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org).
 
-## 1.1.0 (2019-02-15)
+## v1.1.0 (2021-02-17)
 
-- Added measuring and logging the execution time to the console output.
+- Added logging the execution time to the console output.
 
-## 1.0.0 (2019-02-15)
+## v1.0.0 (2021-01-19)
 
 - First stable release.
+- Fixes bugs and improves documentation.
+
+## v0.1.0 (2021-01-18)
+
+- First working version.
