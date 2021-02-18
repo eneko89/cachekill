@@ -23,6 +23,9 @@
     "revisioning",
     "assets",
     "hash",
+    "npm",
+    "scripts",
+    "npm scripts",
     "cli"
   ],
   "bin": {

@@ -15,6 +15,7 @@ There were already similar packages out there, but either they weren't actively 
 
 > :warning:&nbsp; **Warning:** From v2.0.0, cachekill uses ECMAScript module syntax and top level await statements, which are supported unflagged from Node v13.0.0 and v14.8.0 respectively. Upgrade your Node version or stick to v1.1.0 for Node 10.0.0 or higher support.
 
+
 ## Using cachekill
 
 To install it: `npm install cachekill` (requires Node 14.8.0 or higher)
@@ -63,9 +64,9 @@ After running `cachekill -s 'assets/**/!(*.html)' -t 'assets/**/*.{js,css,html}'
         │    └── bundle.min-HASH.js
         └── index.html
 
-All files not ending with `.html` have been fingerprinted and all the occurrences of those in every `.js`, `.css` and `.html` files replaced by the new filenames.
+All files not ending with `.html` have been fingerprinted and all the occurrences of those in every `.js`, `.css` and `.html` files replaced by the new filenames. For example, if `bundle.min.css` had a `url('../img/a.jpg')` css rule, now `bundle.min-HASH.css` would have `url('../img/a-HASH.jpg')`.
 
-If you run it with `-r` or `--rename` option, files would've been renamed instead of copied:
+If you run it with `-r` or `--rename`, files get rewritten instead of copied. Use it with caution, as it is a destructive operation. It's intended to be used with copied files as part of the build process, and not over the original ones:
 
     └── assets
         ├── img
@@ -76,6 +77,16 @@ If you run it with `-r` or `--rename` option, files would've been renamed instea
         ├── js
         │   └── bundle.min-HASH.js
         └── index.html
+
+Simple example of usage as part of the build process with npm scripts:
+
+    "scripts": {
+      "build:assets": "copies assets from ./assets to ./dist",
+      "build:js": "generates js bundle in ./dist/js",
+      "build:css": "generates css bundle in ./dist/css",
+    ->"build:fprints": "cachekill -rl 8 -s 'dist/**/!(*.html)' -t 'dist/**/*.{js,css,html}'",
+      "build": "rm -rf dist && (npm run build:assets &  npm run build:js & npm run build:css & wait) && npm run build:fprints",
+    }
 
 
 ## License
