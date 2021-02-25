@@ -16,6 +16,7 @@ program
   .requiredOption('-t, --target <files...>', 'Target file(s); files with references to source files to be replaced')
   .option('-l, --length <length>', 'Length of the fingerprint (between 1-32); longer means less colisions (defaults to 32)')
   .option('-r, --rename', 'Rename source files with the fingerprint instead of generating copies; ignores')
+  .option('-p, --pattern <pattern>', 'Pattern for the fingerprinted filenames; defaults to {name}-{hash}{ext}')
   .option('-q, --quiet', 'Supresses console output')
   .helpOption('-h, --help', 'Displays usage information')
   .parse(process.argv)
@@ -27,7 +28,8 @@ cachekill(
   await glob(options.source),
   await glob(options.target),
   options.length,
-  options.rename
+  options.rename,
+  options.pattern
 );
 
 /**
@@ -35,12 +37,19 @@ cachekill(
  * content hash and replaces references to those files in targetFiles with the
  * new source filenames.
  *
- * @param {stirng[]} sourceFiles      Files to fingerprint.
- * @param {string[]} targetFiles      Files with references to sourceFiles.
- * @param {number}   [hashLength=32] Length of the resulting hash (sliced md5).
- * @param {boolean}  [rename=false]   Rename instead of copying source files.
+ * @param {stirng[]} sourceFiles                    Files to fingerprint.
+ * @param {string[]} targetFiles                    Files with references to
+ *                                                  sourceFiles to replace.
+ * @param {number}   [hashLength=32]                Length of the resulting hash
+ *                                                  (sliced md5 hash, max 32).
+ * @param {boolean}  [rename=false]                 If true, renames source files
+ *                                                  instead of generating copies.
+ * @param {boolean}  [pattern='{name}-{hash}{ext}'] Format of the new or renamed
+ *                                                  files. It must contain {name},
+ *                                                  {hash} and {ext} placeholders.
  */
-async function cachekill(sourceFiles, targetFiles, hashLength = 32, rename = false) {
+async function cachekill(sourceFiles, targetFiles, hashLength = 32,
+                         rename = false, pattern = '{name}-{hash}{ext}') {
   const sourceBases = [];
   const sourcePaths = [];
   const operation = rename ? fs.rename : fs.copyFile;
@@ -54,7 +63,10 @@ async function cachekill(sourceFiles, targetFiles, hashLength = 32, rename = fal
     const hash = await getHash(filePath, hashLength);
 
     const parsedPath = path.parse(filePath);
-    const newBase = `${parsedPath.name}-${hash}${parsedPath.ext}`;
+    const newBase = pattern
+      .replace('{name}', parsedPath.name)
+      .replace('{hash}', hash)
+      .replace('{ext}', parsedPath.ext);
     const newPath = `${parsedPath.dir}${path.sep}${newBase}`;
 
     sourceBases.push({ newBase, base: parsedPath.base });
@@ -64,6 +76,9 @@ async function cachekill(sourceFiles, targetFiles, hashLength = 32, rename = fal
   if (rename) {
     await replaceReferences(sourceBases, targetFiles);
   } else {
+    // If files get copied instead or renamed and there are source files that
+    // are targets too, we need to update those targets, so we do the filename
+    // replacements in the copied files and not in the original ones.
     for (const obj of sourcePaths) {
       const index = targetFiles.indexOf(obj.path);
       if (index !== -1) {
