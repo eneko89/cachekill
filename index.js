@@ -15,8 +15,8 @@ program
   .requiredOption('-s, --source <files...>', 'Source file(s); a fingerprinted copy will be generated for each of them')
   .requiredOption('-t, --target <files...>', 'Target file(s); files with references to source files to be replaced')
   .option('-l, --length <length>', 'Length of the fingerprint (between 1-32); longer means less colisions (defaults to 32)')
-  .option('-r, --rename', 'Rename source files with the fingerprint instead of generating copies; ignores')
   .option('-p, --pattern <pattern>', 'Pattern for the fingerprinted filenames; defaults to {name}-{hash}{ext}')
+  .option('-r, --rename', 'Rename source files with the fingerprint instead of generating copies; ignores')
   .option('-q, --quiet', 'Supresses console output')
   .helpOption('-h, --help', 'Displays usage information')
   .parse(process.argv)
@@ -44,7 +44,7 @@ cachekill(
  *                                                  (sliced md5 hash, max 32).
  * @param {boolean}  [rename=false]                 If true, renames source files
  *                                                  instead of generating copies.
- * @param {boolean}  [pattern='{name}-{hash}{ext}'] Format of the new or renamed
+ * @param {string}   [pattern='{name}-{hash}{ext}'] Format of the new or renamed
  *                                                  files. It must contain {name},
  *                                                  {hash} and {ext} placeholders.
  */
