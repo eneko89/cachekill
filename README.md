@@ -24,14 +24,17 @@ Run `cachekill --help` for usage information.
 
     Options:
       -v, --version            Outputs the current version number
-      -s, --source <files...>  Source file(s); a fingerprinted copy will be generated for each of them
-      -t, --target <files...>  Target file(s); files with references to source files to be replaced
-      -l, --length <length>    Length of the fingerprint (between 1-32); longer means less collisions (defaults to 32)
+      -s, --source  <files...> Source file(s); a fingerprinted copy will be generated for each of them
+      -t, --target  <files...> Target file(s); files with references to source files to be replaced
+      -l, --length  <length>   Length of the fingerprint (between 1-32); longer means less collisions (defaults to 32)
+      -p, --pattern <pattern>  Pattern for the fingerprinted filenames; defaults to {name}-{hash}{ext}
       -r, --rename             Rename source files with the fingerprint instead of generating copies
       -q, --quiet              Supresses console output
       -h, --help               Displays usage information
 
 Both source and target can be a list or files or globs. It will work even in platforms and shells that don't support globbing (like Windows), because `cachekill` has support for expanding globs itself. Just make sure you quote the arguments so the glob expansion will not depend on the shell you run the command in.
+
+If you use a pattern string for fingerprinted filenames (default one is `{name}-{hash}{ext}`), it must contain `{name}`, `{hash}` and `{ext}` placeholders.
 
 
 ## Examples
