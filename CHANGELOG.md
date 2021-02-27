@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org).
 
+## v2.1.0 (2021-02-26)
+
+- Adds a new --pattern argument to specify the format of the fingerprinted filename.
+
 ## v2.0.0 (2021-02-18)
 
 - Breaking change: Node >= 14.8.0 is required from now on.
