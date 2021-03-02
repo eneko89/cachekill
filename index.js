@@ -1,45 +1,38 @@
-#!/usr/bin/env node
-
 import path from'path';
-import crypto from 'crypto';
 import glob from 'fast-glob';
-import program from 'commander';
+import crypto from 'crypto';
 import replace from 'replace-in-file';
 import { promises as fs } from 'fs';
-import { performance } from 'perf_hooks';
 
-const startTime = performance.now();
+/**
+ * @typedef  {object} SourcePaths
+ * @property {string} SourcePaths.path    Original file path: path/file.js
+ * @property {string} SourcePaths.newPath Path of the fingerprinted file:
+ *                                        path/file-HASH.js.
+ */
 
-program
-  .version('2.1.0', '-v, --version', 'Outputs the current version number')
-  .requiredOption('-s, --source <files...>', 'Source file(s); a fingerprinted copy will be generated for each of them')
-  .requiredOption('-t, --target <files...>', 'Target file(s); files with references to source files to be replaced')
-  .option('-l, --length <length>', 'Length of the fingerprint (between 1-32); longer means less colisions (defaults to 32)')
-  .option('-p, --pattern <pattern>', 'Pattern for the fingerprinted filenames; defaults to {name}-{hash}{ext}')
-  .option('-r, --rename', 'Rename source files with the fingerprint instead of generating copies; ignores')
-  .option('-q, --quiet', 'Supresses console output')
-  .helpOption('-h, --help', 'Displays usage information')
-  .parse(process.argv)
+/**
+ * @typedef  {object} SourceBases
+ * @property {string} SourceBases.base    Original filename: file.js.
+ * @property {string} SourceBases.newBase Name of the fingerprinted file:
+ *                                        file-HASH.js.
+ */
 
-const options = program.opts();
-const log = options.quiet ? () => {} : console.log;
-
-cachekill(
-  await glob(options.source),
-  await glob(options.target),
-  options.length,
-  options.rename,
-  options.pattern
-);
+/**
+ * @typedef  {object} Result
+ * @property {SourcePaths[]} sourcePaths Paths of processed sources files.
+ * @property {string[]}      targetPaths Paths of processed target files.
+ */
 
 /**
  * Fingerprints sourceFiles (either creating copies or renaming them) with a md5
  * content hash and replaces references to those files in targetFiles with the
  * new source filenames.
  *
- * @param {stirng[]} sourceFiles                    Files to fingerprint.
- * @param {string[]} targetFiles                    Files with references to
- *                                                  sourceFiles to replace.
+ * @param {stirng[]} sourceFiles                    Paths or globs of files to
+ *                                                  fingerprint.
+ * @param {string[]} targetFiles                    Paths or globs of files with
+ *                                                  references to sourceFiles.
  * @param {number}   [hashLength=32]                Length of the resulting hash
  *                                                  (sliced md5 hash, max 32).
  * @param {boolean}  [rename=false]                 If true, renames source files
@@ -47,19 +40,22 @@ cachekill(
  * @param {string}   [pattern='{name}-{hash}{ext}'] Format of the new or renamed
  *                                                  files. It must contain {name},
  *                                                  {hash} and {ext} placeholders.
+ * @return {Promise<Result>}                        A relation of the processed
+ *                                                  source and target files.
  */
-async function cachekill(sourceFiles, targetFiles, hashLength = 32,
-                         rename = false, pattern = '{name}-{hash}{ext}') {
+export async function cachekill(sourceFiles, targetFiles, hashLength = 32,
+                                rename = false, pattern = '{name}-{hash}{ext}') {
   const sourceBases = [];
   const sourcePaths = [];
-  const operation = rename ? fs.rename : fs.copyFile;
+  const sources = await glob(sourceFiles);
+  const targets = await glob(targetFiles);
 
-  // Make sure that sourceFiles are sorted in a reverse alphabetical order,
+  // Make sure that source files are sorted in a reverse alphabetical order,
   // so files with common filename endings don't get wrongly replaced. E.g.:
   // ['file.js', 'other-file.js'] --> ['other-file.js', 'file.js'].
-  sourceFiles.sort().reverse();
+  sources.sort().reverse();
 
-  for (const filePath of sourceFiles) {
+  for (const filePath of sources) {
     const hash = await getHash(filePath, hashLength);
 
     const parsedPath = path.parse(filePath);
@@ -74,45 +70,44 @@ async function cachekill(sourceFiles, targetFiles, hashLength = 32,
   }
 
   if (rename) {
-    await replaceReferences(sourceBases, targetFiles);
+    await replaceReferences(sourceBases, targets);
   } else {
     // If files get copied instead or renamed and there are source files that
     // are targets too, we need to update those targets, so we do the filename
     // replacements in the copied files and not in the original ones.
     for (const obj of sourcePaths) {
-      const index = targetFiles.indexOf(obj.path);
+      const index = targets.indexOf(obj.path);
       if (index !== -1) {
-        targetFiles[index] = obj.newPath;
+        targets[index] = obj.newPath;
       }
     }
   }
 
+  const operation = rename ? fs.rename : fs.copyFile;
   for (const obj of sourcePaths) {
     await operation(obj.path, obj.newPath);
-    log(rename ? 'renamed:' : 'copied:', obj.path, '-->', obj.newPath);
   }
 
+  // If files got copied instead of renamed, replacement of references
+  // must be done after generating the copies, not in the originals.
   if (!rename) {
-    await replaceReferences(sourceBases, targetFiles);
+    await replaceReferences(sourceBases, targets);
   }
 
-  const elapsedTime = Math.round(performance.now() - startTime);
-  log(`${targetFiles.length} target file(s) updated in ${elapsedTime}ms`);
+  return { sourcePaths, targetPaths: targets };
 }
 
 /**
- * Replaces the old file bases with the new ones in targetFiles.
+ * Replaces the old file bases with the new ones in target files.
  *
- * @param {Object[]} sourceBases           New and old and file bases.
- * @param {string}   sourceBases[].base    Old file base, e.g., name.js.
- * @param {string}   sourceBases[].newBase New file base, e.g., name-HASH.js.
- * @param {string[]} targetFiles           Target files to update.
+ * @param {SourceBases[]} sourceBases New and old file bases.
+ * @param {string[]}      targets     Paths to target files.
  */
-async function replaceReferences(sourceBases, targetFiles) {
+async function replaceReferences(sourceBases, targets) {
   await replace({
     from: sourceBases.map(obj => obj.base),
     to: sourceBases.map(obj => obj.newBase),
-    files: targetFiles
+    files: targets
   });
 }
 
@@ -121,7 +116,7 @@ async function replaceReferences(sourceBases, targetFiles) {
  *
  * @param  {stirng} filePath        Path to the file to process.
  * @param  {number} [hashLength=32] Length of the resulting hash.
- * @return {string}                 Hash in hex notation.
+ * @return {Promise<string>}        Hash in hex notation.
  */
 async function getHash(filePath, hashLength = 32) {
   const hash = crypto.createHash('md5');

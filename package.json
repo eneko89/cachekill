@@ -29,8 +29,9 @@
     "npm scripts",
     "cli"
   ],
+  "exports": "./index.js",
   "bin": {
-    "cachekill": "index.js"
+    "cachekill": "cli.js"
   },
   "dependencies": {
     "commander": "~7.1.0",
