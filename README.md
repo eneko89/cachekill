@@ -20,7 +20,7 @@ There were already similar packages out there, but either they weren't actively 
 
 A local install is enough if you plan to use it within npm scripts:
 
-`npm install cachekill --save-dev` (requires Node 14.8.0 or higher)
+`npm install cachekill --save-dev` **(requires Node 14.8.0 or higher)**
 
 Use `npx cachekill` to run it anywere without installing or install it globally with `npm install -g cachekill` if you wish to run it like any other binary in your shell.
 
