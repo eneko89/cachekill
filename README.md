@@ -36,9 +36,9 @@ Run `cachekill --help` for usage information.
       -q, --quiet              Supresses console output
       -h, --help               Displays usage information
 
-Both source and target can be a list or files or globs. It will work even in platforms and shells that don't support globbing (like Windows), because `cachekill` has support for expanding globs itself. Just make sure you quote the arguments so the glob expansion will not depend on the shell you run the command in.
+Both source and target can be a list of files or globs. It will work even in platforms and shells that don't support globbing (like Windows), because `cachekill` has support for expanding globs itself. Just make sure you quote the arguments so the glob expansion will not depend on the shell you run the command in.
 
-If you use a pattern string for fingerprinted filenames (default one is `{name}-{hash}{ext}`), it must contain `{name}`, `{hash}` and `{ext}` placeholders.
+If you use a pattern string to fingerprint source filenames (default one is `{name}-{hash}{ext}`), it must contain `{name}`, `{hash}` and `{ext}` placeholders.
 
 
 ### Examples
@@ -73,7 +73,7 @@ After running `cachekill -s 'assets/**/!(*.html)' -t 'assets/**/*.{js,css,html}'
 
 All files not ending with `.html` have been fingerprinted and all the occurrences of those in every `.js`, `.css` and `.html` files replaced by the new filenames. For example, if `bundle.min.css` had a `url('../img/a.jpg')` css rule, now `bundle.min-HASH.css` would have `url('../img/a-HASH.jpg')`.
 
-If you run it with `-r` or `--rename`, files get rewritten instead of copied. Use it with caution, as it is a destructive operation. It's intended to be used with copied files as part of the build process, and not over the original ones:
+If you run it with `-r` or `--rename`, files get rewritten instead of copied. Use it with caution, as it is a destructive operation. It's intended to be used with copied files as part of the build process, and not with the original ones:
 
     └── assets
         ├── img
@@ -130,7 +130,7 @@ This is the signature of the `cachekill` function:
  *                                                  source and target files.
  */
 export async function cachekill(sourceFiles, targetFiles, hashLength = 32,
-                                rename = false, pattern = '{name}-{hash}{ext}') {
+                                rename = false, pattern = '{name}-{hash}{ext}')
 ```
 
 Check source code in `index.js` for more details.
