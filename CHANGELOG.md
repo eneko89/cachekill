@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org).
 
+## v2.2.0 (2021-03-04)
+
+- Exports a `cachekill` function to enable programmatic usage in addition to CLI.
+
 ## v2.1.0 (2021-02-26)
 
 - Adds a new --pattern argument to specify the format of the fingerprinted filename.
