@@ -9,7 +9,7 @@ import { performance } from 'perf_hooks';
 program
   .version('2.2.0', '-v, --version', 'Outputs the current version number')
   .requiredOption('-s, --source <files...>', 'Source file(s); a fingerprinted copy will be generated for each of them')
-  .requiredOption('-t, --target <files...>', 'Target file(s); files with references to source files to be replaced')
+  .option('-t, --target <files...>', 'Target file(s); files with references to source files to be replaced')
   .option('-l, --length <length>', 'Length of the fingerprint (between 1-32); longer means less colisions (defaults to 32)')
   .option('-p, --pattern <pattern>', 'Pattern for the fingerprinted filenames; defaults to {name}-{hash}{ext}')
   .option('-r, --rename', 'Rename source files with the fingerprint instead of generating copies; ignores')
@@ -32,6 +32,6 @@ if (!opts.quiet) {
     console.log(operation, obj.path, '-->', obj.newPath);
   }
   const elapsedTime = Math.round(performance.now() - startTime);
-  const targetCount = result.targetPaths.length;
+  const targetCount = result.targetPaths ? result.targetPaths.length : 0;
   console.log(`${targetCount} target file(s) updated in ${elapsedTime}ms`);
 }

@@ -20,8 +20,8 @@ import { promises as fs } from 'fs';
 
 /**
  * @typedef  {object} Result
- * @property {SourcePaths[]} sourcePaths Paths of processed sources files.
- * @property {string[]}      targetPaths Paths of processed target files.
+ * @property {SourcePaths[]} sourcePaths   Paths of processed sources files.
+ * @property {string[]}      [targetPaths] Paths of processed target files.
  */
 
 /**
@@ -48,7 +48,9 @@ export async function cachekill(sourceFiles, targetFiles, hashLength = 32,
   const sourceBases = [];
   const sourcePaths = [];
   const sources = await glob(sourceFiles);
-  const targets = await glob(targetFiles);
+  const targets = Array.isArray(targetFiles)
+                  && targetFiles.length
+                  && await glob(targetFiles);
 
   // Make sure that source files are sorted in a reverse alphabetical order,
   // so files with common filename endings don't get wrongly replaced. E.g.:
@@ -69,16 +71,18 @@ export async function cachekill(sourceFiles, targetFiles, hashLength = 32,
     sourcePaths.push({ newPath, path: filePath });
   }
 
-  if (rename) {
-    await replaceReferences(sourceBases, targets);
-  } else {
-    // If files get copied instead or renamed and there are source files that
-    // are targets too, we need to update those targets, so we do the filename
-    // replacements in the copied files and not in the original ones.
-    for (const obj of sourcePaths) {
-      const index = targets.indexOf(obj.path);
-      if (index !== -1) {
-        targets[index] = obj.newPath;
+  if (targets) {
+    if (rename) {
+      await replaceReferences(sourceBases, targets);
+    } else {
+      // If files get copied instead of renamed and there are source files
+      // that are targets too, we need to update those targets, so we do the
+      // filename replacements in the copied files and not in the originals.
+      for (const obj of sourcePaths) {
+        const index = targets.indexOf(obj.path);
+        if (index !== -1) {
+          targets[index] = obj.newPath;
+        }
       }
     }
   }
@@ -90,11 +94,11 @@ export async function cachekill(sourceFiles, targetFiles, hashLength = 32,
 
   // If files got copied instead of renamed, replacement of references
   // must be done after generating the copies, not in the originals.
-  if (!rename) {
+  if (targets && !rename) {
     await replaceReferences(sourceBases, targets);
   }
 
-  return { sourcePaths, targetPaths: targets };
+  return { sourcePaths, targetPaths: targets || null };
 }
 
 /**
