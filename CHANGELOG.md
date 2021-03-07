@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org).
 
+## v2.3.0 (2021-03-07)
+
+- Makes --target files optional, both in CLI and the exported function..
+
 ## v2.2.0 (2021-03-04)
 
 - Exports a `cachekill` function to enable programmatic usage in addition to CLI.
