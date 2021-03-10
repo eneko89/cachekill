@@ -6,6 +6,24 @@
   "repository": "eneko89/cachekill",
   "license": "MIT",
   "type": "module",
+  "exports": "./index.js",
+  "types": "./index.d.ts",
+  "bin": "./cli.js",
+  "scripts": {
+    "ts": "tsc -p tsconfig.json",
+    "ts:watch": "tsc -p tsconfig.json --watch"
+  },
+  "dependencies": {
+    "commander": "~7.1.0",
+    "fast-glob": "~3.2.5",
+    "replace-in-file": "~6.2.0"
+  },
+  "devDependencies": {
+    "typescript": "~4.2.3"
+  },
+  "engines": {
+    "node": ">=14.8.0"
+  },
   "keywords": [
     "cache",
     "caching",
@@ -28,17 +46,5 @@
     "scripts",
     "npm scripts",
     "cli"
-  ],
-  "exports": "./index.js",
-  "bin": {
-    "cachekill": "cli.js"
-  },
-  "dependencies": {
-    "commander": "~7.1.0",
-    "fast-glob": "~3.2.5",
-    "replace-in-file": "~6.2.0"
-  },
-  "engines": {
-    "node": ">=14.8.0"
-  }
+  ]
 }
