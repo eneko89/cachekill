@@ -3,8 +3,8 @@
 const startTime = performance.now();
 
 import program from 'commander';
-import { cachekill } from './index.js';
 import { performance } from 'perf_hooks';
+import { cachekill } from './lib/esm/cachekill.js';
 
 program
   .version('2.3.0', '-v, --version', 'Outputs the current version number')
