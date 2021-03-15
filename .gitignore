@@ -1,6 +1,2 @@
 # NPM dependency folder
-node_modules/*
-
-# OS folder config files
-Desktop.ini
-.DS_Store
+node_modules
