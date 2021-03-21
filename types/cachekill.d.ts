@@ -4,17 +4,19 @@
  * @property {string} SourcePaths.newPath Path of the fingerprinted file:
  *                                        path/file-HASH.js.
  */
-/**
- * @typedef  {object} SourceBases
- * @property {string} SourceBases.base    Original filename: file.js.
- * @property {string} SourceBases.newBase Name of the fingerprinted file:
- *                                        file-HASH.js.
- */
+declare type SourcePaths = {
+    path: string;
+    newPath: string;
+};
 /**
  * @typedef  {object} Result
  * @property {SourcePaths[]} sourcePaths   Paths of processed sources files.
  * @property {string[]}      [targetPaths] Paths of processed target files.
  */
+declare type Result = {
+    sourcePaths: SourcePaths[];
+    targetPaths?: string[];
+};
 /**
  * Fingerprints sourceFiles (either creating copies or renaming them) with a md5
  * content hash and replaces references to those files in targetFiles with the
@@ -34,10 +36,5 @@
  * @return {Promise<Result>}                        A relation of the processed
  *                                                  source and target files.
  */
-export declare function cachekill(sourceFiles: any, targetFiles: any, hashLength?: number, rename?: boolean, pattern?: string): Promise<{
-    sourcePaths: {
-        newPath: string;
-        path: string;
-    }[];
-    targetPaths: string[] | null;
-}>;
+export declare function cachekill(sourceFiles: string | string[], targetFiles?: string | string[], hashLength?: number, rename?: boolean, pattern?: string): Promise<Result>;
+export {};
