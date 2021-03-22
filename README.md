@@ -22,7 +22,7 @@ A local install is enough if you plan to use it within npm scripts:
 
 `npm install cachekill --save-dev` **(requires Node 14.8.0 or higher)**
 
-Use `npx cachekill` to run it anywere without installing or install it globally with `npm install -g cachekill` if you wish to run it like any other binary in your shell.
+Use `npx cachekill` to run it anywere without installing, or install it globally with `npm install -g cachekill` if you wish to run it like any other binary in your shell.
 
 Run `cachekill --help` for usage information.
 
@@ -98,12 +98,19 @@ Simple example of usage as part of the build process with npm scripts:
 
 ## Usage through API
 
-This package exports a single function named `cachekill` as an ES module.
+This package exports a single function named `cachekill` as an ES module. From v3.0.0 it supports CJS too.
 
 The equivalent API call for the CLI example above would be:
 
 ```javascript
 import { cachekill } from 'cachekill';
+cachekill('dist/**/!(*.html)', 'dist/**/*.{js,css,html}');
+```
+
+Or using CJS:
+
+```javascript
+const { cachekill } = require('cachekill');
 cachekill('dist/**/!(*.html)', 'dist/**/*.{js,css,html}');
 ```
 
@@ -115,25 +122,28 @@ This is the signature of the `cachekill` function:
  * content hash and replaces references to those files in targetFiles with the
  * new source filenames.
  *
- * @param {stirng[]} sourceFiles                    Paths or globs of files to
+ * @param {stirng|stirng[]}  sourceFiles            Paths or globs of files to
  *                                                  fingerprint.
- * @param {string[]} targetFiles                    Paths or globs of files with
+ * @param {string|string[]}  [targetFiles]          Paths or globs of files with
  *                                                  references to sourceFiles.
- * @param {number}   [hashLength=32]                Length of the resulting hash
+ * @param {number}           [hashLength=32]        Length of the resulting hash
  *                                                  (sliced md5 hash, max 32).
- * @param {boolean}  [rename=false]                 If true, renames source files
+ * @param {boolean}          [rename=false]         If true, renames source files
  *                                                  instead of generating copies.
- * @param {string}   [pattern='{name}-{hash}{ext}'] Format of the new or renamed
+ * @param {string}  [pattern='{name}-{hash}{ext}']  Format of the new or renamed
  *                                                  files. It must contain {name},
  *                                                  {hash} and {ext} placeholders.
  * @return {Promise<Result>}                        A relation of the processed
  *                                                  source and target files.
  */
-export async function cachekill(sourceFiles, targetFiles, hashLength = 32,
-                                rename = false, pattern = '{name}-{hash}{ext}')
+export async function cachekill(sourceFiles: string | string[],
+                                targetFiles?: string | string[],
+                                hashLength: number = 32,
+                                rename: boolean = false,
+                                pattern: string = '{name}-{hash}{ext}'): Promise<Result> {
 ```
 
-Check source code in `index.js` for more details.
+Check source code in `src/cachekill.ts` for more details.
 
 
 ## License
