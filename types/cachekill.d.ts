@@ -24,7 +24,7 @@ declare type Result = {
  *
  * @param {stirng|stirng[]}  sourceFiles            Paths or globs of files to
  *                                                  fingerprint.
- * @param {string|string[]}  targetFiles            Paths or globs of files with
+ * @param {string|string[]}  [targetFiles]          Paths or globs of files with
  *                                                  references to sourceFiles.
  * @param {number}           [hashLength=32]        Length of the resulting hash
  *                                                  (sliced md5 hash, max 32).

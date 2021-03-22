@@ -43,7 +43,7 @@ type Result = {
  *
  * @param {stirng|stirng[]}  sourceFiles            Paths or globs of files to
  *                                                  fingerprint.
- * @param {string|string[]}  targetFiles            Paths or globs of files with
+ * @param {string|string[]}  [targetFiles]          Paths or globs of files with
  *                                                  references to sourceFiles.
  * @param {number}           [hashLength=32]        Length of the resulting hash
  *                                                  (sliced md5 hash, max 32).
@@ -119,8 +119,9 @@ export async function cachekill(sourceFiles: string | string[],
 /**
  * Replaces the old file bases with the new ones in target files.
  *
- * @param {SourceBases[]} sourceBases New and old file bases.
- * @param {string[]}      targets     Paths to target files.
+ * @param  {SourceBases[]} sourceBases New and old file bases.
+ * @param  {string[]}      targets     Paths to target files.
+ * @return {Promise}
  */
 async function replaceReferences(sourceBases: SourceBases[],
                                  targets: string[]): Promise<void> {
