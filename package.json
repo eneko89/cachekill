@@ -1,6 +1,6 @@
 {
   "name": "cachekill",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "description": "Simple command line cache busting tool which fingerprints files with a content hash.",
   "author": "Eneko <contact@eneko.me>",
   "repository": "eneko89/cachekill",

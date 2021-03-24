@@ -7,7 +7,7 @@ import { performance } from 'perf_hooks';
 import { cachekill } from './lib/esm/cachekill.js';
 
 program
-  .version('2.3.0', '-v, --version', 'Outputs the current version number')
+  .version('3.0.0', '-v, --version', 'Outputs the current version number')
   .requiredOption('-s, --source <files...>', 'Source file(s); a fingerprinted copy will be generated for each of them')
   .option('-t, --target <files...>', 'Target file(s); files with references to source files to be replaced')
   .option('-l, --length <length>', 'Length of the fingerprint (between 1-32); longer means less colisions (defaults to 32)')
