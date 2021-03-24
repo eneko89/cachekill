@@ -4,9 +4,19 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org).
 
+## v3.0.0 (2021-03-24)
+
+- Gets CJS module support back through conditional exports.
+  - Since v2.0.0, only ESM was supported.
+  - Both ESM and CJS are supported now.
+- Adds TypeScript and TypeScript declarations.
+- Fixes bug introduced in v2.3.0 when `target` option was made optional.
+  - Passing a single strings was ignored, only arrays were being accepted.
+  - Only the exported function was affected, not the CLI.
+
 ## v2.3.0 (2021-03-07)
 
-- Makes --target files optional, both in CLI and the exported function..
+- Makes --target files optional, both in CLI and the exported function.
 
 ## v2.2.0 (2021-03-04)
 
