@@ -1,8 +1,8 @@
 import path from 'path';
 import glob from 'fast-glob';
 import crypto from 'crypto';
+import replace from 'replace-in-file';
 import { promises as fs } from 'fs';
-import { replaceInFile }from 'replace-in-file';
 
 /**
  * @typedef  {object} SourcePaths
@@ -125,7 +125,7 @@ export async function cachekill(sourceFiles: string | string[],
  */
 async function replaceReferences(sourceBases: SourceBases[],
                                  targets: string[]): Promise<void> {
-  await replaceInFile({
+  await replace.replaceInFile({
     from: sourceBases.map(obj => obj.base),
     to: sourceBases.map(obj => obj.newBase),
     files: targets
