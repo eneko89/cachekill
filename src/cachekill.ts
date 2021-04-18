@@ -126,7 +126,7 @@ export async function cachekill(sourceFiles: string | string[],
 async function replaceReferences(sourceBases: SourceBases[],
                                  targets: string[]): Promise<void> {
   await replace.replaceInFile({
-    from: sourceBases.map(obj => obj.base),
+    from: sourceBases.map(obj => new RegExp(obj.base, 'g')),
     to: sourceBases.map(obj => obj.newBase),
     files: targets
   });
